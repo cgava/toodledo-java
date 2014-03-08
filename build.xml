@@ -1,7 +1,7 @@
 <project name="toodledo-java" basedir="." default="main" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 <property name="src.dir"     value="src"/>
-<property name="build.dir"   value="build"/>
+<property name="build.dir"   value="bin"/>
 <property name="classes.dir" value="${build.dir}/classes"/>
 <property name="jar.dir"     value="${build.dir}/jar"/>
 <property name="main-class"  value="org.loststone.toodledo.client.Client"/>
@@ -18,14 +18,16 @@
 	<delete dir="build"/>
 </target>
 
-<target name="resolve" description="--> retreive dependencies with ivy">
+<!--
+<target name="resolve" description=" retreive dependencies with ivy">
 	<ivy:retrieve/>
-</target>    
+</target>  
+-->
 
-<target name="compile" depends="resolve">
+<target name="compile">
 	<mkdir dir="${classes.dir}"/>
 	<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath"/>
-	<javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+	<!--javac srcdir="${test.dir}" destdir="${classes.dir}" classpathref="classpath"/-->
 </target>
 
 <target name="jar" depends="compile">
@@ -54,6 +56,7 @@ windowtitle="Toodledo Java API">
 </javadoc>
 </target>
 
+<!--
   <target name="test" depends="compile" description="Run the unit tests">
     <delete dir="${junit.report.dir}"/>
     <mkdir dir="${junit.report.dir}"/>
@@ -78,5 +81,6 @@ windowtitle="Toodledo Java API">
     
     <fail if="testfailed" message="Some test(s) failed. See '${junit.report.dir}' for details."/>
   </target>
-
+-->
+	
 </project>

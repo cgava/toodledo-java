@@ -1,6 +1,0 @@
-*.class
-*.jar
-.project
-.classpath
-src/org/loststone/toodledo/client
-doc/javadoc

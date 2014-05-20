@@ -1,6 +1,11 @@
 package org.loststone.toodledo;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Properties;
 
 import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
@@ -43,6 +48,43 @@ import org.loststone.toodledo.xml.GetUserIdParser;
 import org.loststone.toodledo.xml.GoalsParser;
 
 public class ToodledoApiImpl implements ToodledoApi {
+	
+	//default properties filename//
+	private static final String PROPERTY_FILENAME_DEFAULT = "config.properties"; //CGAVA : default property file name to store token and other properties
+	private static final String PROPERTY_NAME_TOKEN = "token";                   //CGAVA : property name of the token in the property file
+	private static final int MIN_TOKEN_AGE = 240;                 //CGAVA : minimum TOKEN age, in seconds. If token age is less than this value, then the token is recreated
+	
+	private AuthToken token=null;                                       //CGAVA : create token attribute for passing tokent between methods
+	
+	
+	//private FileInputStream propFile = null;                           
+
+	//Constructor that reads the property file
+	public ToodledoApiImpl(String propFilename) throws IOException{     
+		FileInputStream propFile = null;
+		try {
+			propFile = new FileInputStream(propFilename);
+			Properties props = new Properties();
+			props.loadFromXML(propFile);
+			
+			System.out.println("DEBUG proptoken = "+props.getProperty(PROPERTY_NAME_TOKEN)); //TODO : CGAVA - change system.out.println to log
+			token=new AuthToken(props.getProperty(PROPERTY_NAME_TOKEN));
+		} catch (IOException e) {
+			System.out.println("Property file does not exist.");
+		} finally {
+			if (propFile != null) {
+				propFile.close();
+			}
+		}
+	}
+	
+	//Constructor with default property file name
+	public ToodledoApiImpl() throws IOException{
+		this(PROPERTY_FILENAME_DEFAULT);
+	}
+	
+
+	
 
 	public int addTodo(AuthToken auth, Todo todo) throws ToodledoApiException {
 		AddTodoRequest request = new AddTodoRequest(auth, todo);
@@ -78,10 +120,17 @@ public class ToodledoApiImpl implements ToodledoApi {
 	}
 	
 	public AuthToken initialize(String username, String password, String appid) throws ToodledoApiException {
+		//if token has been read from property file or is existing, then it is not necessary to request a new token
+		if (token!=null){
+			if (token.getRemainingTime() > MIN_TOKEN_AGE) {
+				System.out.println("OK token remaining time is " + token.getRemainingTime());
+				return token;
+			}
+		} 
 		Request initReq = new AuthorizeRequest(username,appid);
 		// response gives back the token, now create the AuthToken
 		AuthorizeResponse resp = (AuthorizeResponse) initReq.getResponse();
-		AuthToken token = new AuthToken(password, username, resp.getResponseContent());
+		token = new AuthToken(password, username, resp.getResponseContent());
 		return token;
 	}
 
@@ -190,6 +239,25 @@ public class ToodledoApiImpl implements ToodledoApi {
 		} else
 			return false;
 		
+	}
+	
+	public void storeProperties(String propFileName) throws IOException {
+		// TODO : CGAVA there I let IOException, shall it be a ToodledoAPiException ?
+		Properties props = new Properties();
+		OutputStream output = null;
+		try {
+			props.put(PROPERTY_NAME_TOKEN, token.toString());
+			output = new FileOutputStream(propFileName);
+			props.storeToXML(output, "This is a comment");
+		} finally {
+			if (output != null) {
+				output.close();
+			}
+		}
+	}	
+	
+	public void storeProperties() throws IOException {
+		storeProperties(PROPERTY_FILENAME_DEFAULT);
 	}
 
 }

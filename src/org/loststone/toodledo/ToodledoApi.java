@@ -1,5 +1,6 @@
 package org.loststone.toodledo;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.loststone.toodledo.data.Context;
@@ -109,6 +110,16 @@ public interface ToodledoApi {
 	 */
 	List<Todo> getTodosList(AuthToken auth) throws ToodledoApiException;
 	
+	
+	/**
+	 * Gets all the Tasks for that user.
+	 * @param auth Authorization token for that user.
+	 * @return A list containing all the tasks for that user.
+	 * @throws ToodledoApiException
+	 */
+	//List<Todo> getTodosList(AuthToken auth, String lastSynchroDate) throws ToodledoApiException;
+	/* TODO : CGAVA getTodosList(... , String lastSynchroDate) pour n'avoir que les éléments depuis la dernière synchronisation */ 
+	
 	/**
 	 * Gets all the tasks that match the given task.
 	 * @param auth Authorization token for that user.
@@ -164,5 +175,17 @@ public interface ToodledoApi {
 	 * @throws ToodledoApiException
 	 */
 	boolean deleteFolder(AuthToken auth, int folderId) throws ToodledoApiException;
+	
+	
+	/**
+	 * Cedric GAVA : Store the properties (token, token date, etc ...) in a property file
+	 * TODO : CGAVA this is probably a security vulnerability, because the token a restored in clear !!
+	 * @param propFileName filename for the property file.
+	 * @param folderId Folder id. 
+	 * @return true if it managed to delete. False otherwise.
+	 * @throws ToodledoApiException
+	 */
+	public void storeProperties(String propFileName) throws IOException;
+	public void storeProperties() throws IOException;
 	
 }

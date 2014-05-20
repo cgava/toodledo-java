@@ -1,6 +1,7 @@
 package org.loststone.toodledo.client;
 
 import java.io.Console;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +33,7 @@ public class Client {
 	 * @param email E-mail of the user to test.
 	 * @param password 
 	 */
-	public Client(String email, String password) {
+	public Client(String email, String password) throws IOException{
 		this.email = email; 
 		this.password = password; 
 		tdApi = new ToodledoApiImpl();
@@ -44,7 +45,7 @@ public class Client {
 	 * get the AuthToken.
 	 * @return
 	 */
-	private boolean connect() {
+	public boolean connect() {
 		try {
 			this.userid = tdApi.getUserId(email, password);
 			this.token = tdApi.initialize(userid, password);
@@ -62,37 +63,11 @@ public class Client {
 		return true;
 	}
 
-	/**
-	 * Very simple CLI that asks the method to test.
-	 * 
-	 * It only uses three very simple read only commands. Lazyness.
-	 */
-	private void run() {
-		Scanner scan = new Scanner(System.in);
-		boolean finish = false; 
-		while (!finish) {
-			System.out.println("-- toodledo api example --");
-			System.out.println(" 1) get all folders.");
-			System.out.println(" 2) get all goals");
-			System.out.println(" 3) get all todos");
-			System.out.println(" 4) exit");
-			System.out.print("Select option [1,2,3,4]: ");
-			Integer option = scan.nextInt();
-			switch (option) {
-				case 1: getFolders(); break;
-				case 2: getGoals(); break;
-				case 3: getTodos(); break;
-				case 4: finish = true; break; 
-				default: break;
-			}
 
-		}
-	}
-	
 	/**
 	 * Gets the list of all todos and prints their id and their title.
 	 */
-	private void getTodos() {
+	public void getTodos() {
 		try {
 			List<Todo> todolist = tdApi.getTodosList(token);
 			System.out.println("Found "+todolist.size()+" todos:");
@@ -104,6 +79,17 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Gets the list of all todos and prints their id and their title.
+	 */
+	public void storeProperties() {
+		try {
+			tdApi.storeProperties();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Gets the list of all goals and prints their id and their name.
 	 */
@@ -135,15 +121,15 @@ public class Client {
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		String email = null; 
 		String password = null; 
 		
-		Console cons = System.console();
-		if (cons == null) {
-			System.out.println("Couldn't get System Console. Exiting.");
-			System.exit(1);
-		}
+		//Console cons = System.console();
+		//if (cons == null) {
+		//	System.out.println("Couldn't get System Console. Exiting.");
+		//	System.exit(1);
+		//}
 		
 		System.out.println(":: Toodledo Java API example ::");
 		System.out.println("\nHey there!");
@@ -154,14 +140,16 @@ public class Client {
 		System.out.println("\nLibrary home: http://github.com/lant/toodledo-java");
 		
 		// ask for username and password. 
-		System.out.print("\nToodledo user e-mail: ");
-		email = cons.readLine().trim();
-		System.out.print("Toodledo password for "+email+ " (won't be visible): ");
-		password = new String(cons.readPassword());
+		//System.out.print("\nToodledo user e-mail: ");
+		email = "gava.c@free.fr";
+		//System.out.print("Toodledo password for "+email+ " (won't be visible): ");
+		password = "hj9kir77";
 		
 		Client c = new Client(email, password);
-		if (c.connect())
-			c.run();	
+		if (c.connect()) {
+			c.getTodos();
+			c.storeProperties();
+		}
 	}
 
 }

@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;;
 
 /**
  * This class holds the key for the usage of one single user.
@@ -37,6 +39,32 @@ public class AuthToken {
 		}
 		
 		this.date = new DateTime().plusHours(4);
+	}
+	
+	
+	/**
+	 * Cedric GAVA : create an AuthToken from the value stored in a property file rather than getting the authorisation from toodledo server
+	 * Creates the key for a user.
+	 * @param property in the form token|key|date
+	 */
+	public AuthToken(String property) {
+		//TODO : CGAVA verifier si property a bien une taille suffisante ?
+		//TODO : CGAVA verifier les exceptions susceptibles d'être levées
+		System.out.println("DEBUG property = "+property);
+		String str[]=property.split("\\|");
+		System.out.println("DEBUG token = "+str[0]);
+		System.out.println("DEBUG key = "+str[1]);
+		this.token = str[0];
+		this.key = str[1];
+		DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
+		System.out.println("date = "+str[2]);
+		this.date = fmt.parseDateTime(str[2]);
+	}
+	
+	@Override
+	public String toString() {
+		DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
+		return token+"|"+key+"|"+fmt.print(date);
 	}
 	
 	/**

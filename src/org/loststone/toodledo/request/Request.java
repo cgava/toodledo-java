@@ -12,7 +12,8 @@ public abstract class Request {
 	private String authToken = null;
 	// url to the service
 	protected String url = null; 
-	protected String xmlResponse = null; 
+	protected String xmlResponse = null;
+	public static final String DEFAULT_STUB_FILENAME = "request-ios.xml";
 	
 	/**
 	 * Should execute the exec method and give back an appropiate response type. 

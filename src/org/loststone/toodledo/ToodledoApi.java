@@ -178,7 +178,7 @@ public interface ToodledoApi {
 	
 	
 	/**
-	 * Cedric GAVA : Store the properties (token, token date, etc ...) in a property file
+	 * CGAVA : Store the properties (token, token date, etc ...) in a property file
 	 * TODO : CGAVA this is probably a security vulnerability, because the token a restored in clear !!
 	 * @param propFileName filename for the property file.
 	 * @param folderId Folder id. 

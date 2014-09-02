@@ -1,9 +1,7 @@
 package org.loststone.toodledo.client;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 import org.loststone.toodledo.ToodledoApi;
 import org.loststone.toodledo.ToodledoApiImpl;
@@ -13,6 +11,7 @@ import org.loststone.toodledo.data.Todo;
 import org.loststone.toodledo.exception.IncorrectUserPasswordException;
 import org.loststone.toodledo.exception.MissingPasswordException;
 import org.loststone.toodledo.exception.ToodledoApiException;
+import org.loststone.toodledo.request.Request;
 import org.loststone.toodledo.util.AuthToken;
 
 /**
@@ -36,7 +35,7 @@ public class Client {
 	public Client(String email, String password) throws IOException{
 		this.email = email; 
 		this.password = password; 
-		tdApi = new ToodledoApiImpl();
+		tdApi = new ToodledoApiImpl(Request.DEFAULT_STUB_FILENAME);
 	}
 	
 	/**
@@ -69,7 +68,7 @@ public class Client {
 	 */
 	public void getTodos() {
 		try {
-			List<Todo> todolist = tdApi.getTodosList(token);
+			List<Todo> todolist = tdApi.getTodosList(token,null);
 			System.out.println("Found "+todolist.size()+" todos:");
 			for (Todo _tmp : todolist) {
 				System.out.println("  ["+_tmp.getId()+"] - "+_tmp.getTitle());

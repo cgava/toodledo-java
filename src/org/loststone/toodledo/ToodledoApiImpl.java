@@ -52,16 +52,23 @@ public class ToodledoApiImpl implements ToodledoApi {
 	//default properties filename//
 	private static final String PROPERTY_FILENAME_DEFAULT = "config.properties"; //CGAVA : default property file name to store token and other properties
 	private static final String PROPERTY_NAME_TOKEN = "token";                   //CGAVA : property name of the token in the property file
-	private static final int MIN_TOKEN_AGE = 240;                 //CGAVA : minimum TOKEN age, in seconds. If token age is less than this value, then the token is recreated
+	private static final int MIN_TOKEN_AGE = 240;                                //CGAVA : minimum TOKEN age, in seconds. If token age is less than this value, then the token is recreated
 	
-	private AuthToken token=null;                                       //CGAVA : create token attribute for passing tokent between methods
-	
+	private AuthToken token=null;                                               //CGAVA : create token attribute for passing tokent between methods
+	private String stubFilename;
 	
 	//private FileInputStream propFile = null;                           
 
 	//Constructor that reads the property file
-	public ToodledoApiImpl(String propFilename) throws IOException{     
+	/**
+	 * Constructor
+	 * @param propFilename filename of the properties file
+	 * @param stubFilename filename of an xml file used to stub the response for the given request (useful for testing)
+	 * @throws IOException
+	 */
+	public ToodledoApiImpl(String propFilename, String stubFilename) throws IOException{     
 		FileInputStream propFile = null;
+		this.stubFilename = stubFilename;
 		try {
 			propFile = new FileInputStream(propFilename);
 			Properties props = new Properties();
@@ -79,8 +86,8 @@ public class ToodledoApiImpl implements ToodledoApi {
 	}
 	
 	//Constructor with default property file name
-	public ToodledoApiImpl() throws IOException{
-		this(PROPERTY_FILENAME_DEFAULT);
+	public ToodledoApiImpl(String stubFilename) throws IOException{
+		this(PROPERTY_FILENAME_DEFAULT,stubFilename);
 	}
 	
 
@@ -111,7 +118,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 	}
 	
 	public List<Todo> getTodosList(AuthToken auth, Todo filter) throws ToodledoApiException {
-		Request getTodosRequest = new GetTodosRequest(auth, filter);
+		Request getTodosRequest = new GetTodosRequest(auth, filter, this.stubFilename);
 		GetTodosResponse response = (GetTodosResponse)getTodosRequest.getResponse();
 		if (response.succeeded())
 			return new GetTodosParser(response.getXmlResponseContent()).getTodos();
@@ -120,6 +127,10 @@ public class ToodledoApiImpl implements ToodledoApi {
 	}
 	
 	public AuthToken initialize(String username, String password, String appid) throws ToodledoApiException {
+		//When stubbing for test, there is no need to get the token from the server
+		if (this.stubFilename != null) {
+			return new AuthToken (username,password,"NOTOKENWHENSTUB");
+		}
 		//if token has been read from property file or is existing, then it is not necessary to request a new token
 		if (token!=null){
 			if (token.getRemainingTime() > MIN_TOKEN_AGE) {
@@ -130,8 +141,7 @@ public class ToodledoApiImpl implements ToodledoApi {
 		Request initReq = new AuthorizeRequest(username,appid);
 		// response gives back the token, now create the AuthToken
 		AuthorizeResponse resp = (AuthorizeResponse) initReq.getResponse();
-		token = new AuthToken(password, username, resp.getResponseContent());
-		return token;
+		return new AuthToken(password, username, resp.getResponseContent());
 	}
 
 	public AuthToken initialize(String username, String password) throws ToodledoApiException {
@@ -219,13 +229,17 @@ public class ToodledoApiImpl implements ToodledoApi {
 
 	public String getUserId(String mail, String password)
 			throws ToodledoApiException, IncorrectUserPasswordException, MissingPasswordException {
-				
-		GetUserIdRequest request = new GetUserIdRequest(mail,password);
-		GetUserIdResponse response = (GetUserIdResponse)request.getResponse();
-		if(response.succeeded()) 
-			return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
-		else
-			return null;
+		
+		if (this.stubFilename == null) {
+			GetUserIdRequest request = new GetUserIdRequest(mail,password);
+			GetUserIdResponse response = (GetUserIdResponse)request.getResponse();
+			if(response.succeeded()) 
+				return new GetUserIdParser(response.getXmlResponseContent()).getUserId();
+			else
+				return null;
+		} else {
+			return "stubUserId";
+		}
 	}
 
 	public boolean deleteFolder(AuthToken auth, int folderId)

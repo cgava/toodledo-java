@@ -3,7 +3,9 @@ package org.loststone.toodledo.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import org.joda.time.DateTime;
+import org.joda.time.base.BaseDateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;;
 
@@ -96,7 +98,7 @@ public class AuthToken {
 	 * @return seconds until this token will be canceled.
 	 */
 	public int getRemainingTime() {
-		return Math.max(0, this.date.getSecondOfDay() - new DateTime().getSecondOfDay());
+		return (int)Math.max(0, (this.date.getMillis() - new DateTime().getMillis())/1000 );
 	}
 	
 	/**

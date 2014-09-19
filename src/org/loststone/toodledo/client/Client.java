@@ -1,5 +1,6 @@
 package org.loststone.toodledo.client;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class Client {
 	public Client(String email, String password) throws IOException{
 		this.email = email; 
 		this.password = password; 
-		tdApi = new ToodledoApiImpl(Request.DEFAULT_STUB_FILENAME);
+		tdApi = new ToodledoApiImpl(null);
 	}
 	
 	/**
@@ -77,17 +78,6 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Gets the list of all todos and prints their id and their title.
-	 */
-	public void storeProperties() {
-		try {
-			tdApi.storeProperties();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * Gets the list of all goals and prints their id and their name.
@@ -97,7 +87,7 @@ public class Client {
 			List<Goal> goalsList = tdApi.getGoals(token);
 			System.out.println("Found "+goalsList.size()+" goals:");
 			for (Goal _tmp : goalsList) {
-				System.out.println("  ["+_tmp.getId()+"] - "+_tmp.getName());
+				System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`name`,`level`) VALUES "+_tmp.getId()+",0,0,`"+_tmp.getName()+"`,"+_tmp.getLevel()+");");
 			}
 		} catch (ToodledoApiException e) {
 			e.printStackTrace();
@@ -112,7 +102,7 @@ public class Client {
 			List<Folder> foldersList = tdApi.getFolders(token);
 			System.out.println("Found "+foldersList.size()+" folders:");
 			for (Folder _tmp : foldersList) {
-				System.out.println("  ["+_tmp.getId()+"] - "+_tmp.getSName());
+				System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`order`,`name`) VALUES "+_tmp.getId()+",0,0,"+_tmp.getOrder()+",`"+_tmp.getSName()+"`);");
 			}
 		} catch (ToodledoApiException e) {
 			e.printStackTrace();
@@ -120,15 +110,13 @@ public class Client {
 	}
 	
 	
+    
+    
+	
 	public static void main(String[] args) throws IOException{
 		String email = null; 
 		String password = null; 
 		
-		//Console cons = System.console();
-		//if (cons == null) {
-		//	System.out.println("Couldn't get System Console. Exiting.");
-		//	System.exit(1);
-		//}
 		
 		System.out.println(":: Toodledo Java API example ::");
 		System.out.println("\nHey there!");
@@ -141,13 +129,22 @@ public class Client {
 		// ask for username and password. 
 		//System.out.print("\nToodledo user e-mail: ");
 		email = "gava.c@free.fr";
-		//System.out.print("Toodledo password for "+email+ " (won't be visible): ");
-		password = "hj9kir77";
+		System.out.print("Toodledo password for "+email+ " (won't be visible): ");
+		
+//		Console cons = System.console();
+//		if (cons == null) {
+//			System.out.println("Couldn't get System Console. Exiting.");
+//			System.exit(1);
+//		}
+//		password = cons.readLine();
+        password = "";
+		
 		
 		Client c = new Client(email, password);
 		if (c.connect()) {
-			c.getTodos();
-			c.storeProperties();
+			//c.getTodos();
+			c.getFolders();
+			c.getGoals();
 		}
 	}
 

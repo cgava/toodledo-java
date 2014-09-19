@@ -176,16 +176,4 @@ public interface ToodledoApi {
 	 */
 	boolean deleteFolder(AuthToken auth, int folderId) throws ToodledoApiException;
 	
-	
-	/**
-	 * CGAVA : Store the properties (token, token date, etc ...) in a property file
-	 * TODO : CGAVA this is probably a security vulnerability, because the token a restored in clear !!
-	 * @param propFileName filename for the property file.
-	 * @param folderId Folder id. 
-	 * @return true if it managed to delete. False otherwise.
-	 * @throws ToodledoApiException
-	 */
-	public void storeProperties(String propFileName) throws IOException;
-	public void storeProperties() throws IOException;
-	
 }

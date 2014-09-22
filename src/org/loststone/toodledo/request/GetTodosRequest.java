@@ -43,7 +43,7 @@ public class GetTodosRequest extends Request {
 		} else {
 			execOnLocalFile();
 		}
-		System.out.println("xmlResponse = " + this.xmlResponse);
+		//System.out.println("xmlResponse = " + this.xmlResponse);
 	}
 
 	/**

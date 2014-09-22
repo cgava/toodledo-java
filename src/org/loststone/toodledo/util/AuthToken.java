@@ -52,14 +52,14 @@ public class AuthToken {
 	public AuthToken(String property) {
 		//TODO : CGAVA verifier si property a bien une taille suffisante ?
 		//TODO : CGAVA verifier les exceptions susceptibles d'être levées
-		System.out.println("DEBUG property = "+property);
+		//System.out.println("DEBUG property = "+property);
 		String str[]=property.split("\\|");
-		System.out.println("DEBUG token = "+str[0]);
-		System.out.println("DEBUG key = "+str[1]);
+		//System.out.println("DEBUG token = "+str[0]);
+		//System.out.println("DEBUG key = "+str[1]);
 		this.token = str[0];
 		this.key = str[1];
 		DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
-		System.out.println("date = "+str[2]);
+		//System.out.println("date = "+str[2]);
 		this.date = fmt.parseDateTime(str[2]);
 	}
 	

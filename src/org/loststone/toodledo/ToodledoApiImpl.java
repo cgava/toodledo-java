@@ -1,11 +1,7 @@
 package org.loststone.toodledo;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
-import java.util.Properties;
 import java.util.prefs.Preferences;
 
 import org.loststone.toodledo.data.Context;
@@ -52,8 +48,6 @@ import org.loststone.toodledo.xml.GoalsParser;
 public class ToodledoApiImpl implements ToodledoApi {
 	
 	//default properties filename//
-	private static final String PROPERTY_FILENAME_DEFAULT = "config.properties"; //CGAVA : default property file name to store token and other properties
-	private static final String PROPERTY_NAME_TOKEN = "token";                   //CGAVA : property name of the token in the property file
 	private static final int MIN_TOKEN_AGE = 240;                                //CGAVA : minimum TOKEN age, in seconds. If token age is less than this value, then the token is recreated
                                                                                  //CGAVA : create token attribute for passing tokent between methods
 	private String stubFilename;
@@ -68,16 +62,13 @@ public class ToodledoApiImpl implements ToodledoApi {
 	 * @param stubFilename filename of an xml file used to stub the response for the given request (useful for testing)
 	 * @throws IOException
 	 */
-	public ToodledoApiImpl(String propFilename, String stubFilename) throws IOException{     
+	public ToodledoApiImpl(String stubFilename) throws IOException{     
 		this.stubFilename = stubFilename;
 		rootPrefs = Preferences.userNodeForPackage( ToodledoApiImpl.class );
 
 	}
 	
-	//Constructor with default property file name
-	public ToodledoApiImpl(String stubFilename) throws IOException{
-		this(PROPERTY_FILENAME_DEFAULT,stubFilename);
-	}
+
 	
 
 	

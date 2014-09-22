@@ -10,6 +10,7 @@ import org.loststone.toodledo.util.TdDateTime;
  *
  */
 public class Todo {
+
 	String title;
 	String tag; 
 	int folder; // id of the folder, 0 means no folder.
@@ -194,6 +195,7 @@ public class Todo {
 		return priority;
 	}
 	
+	
 	/**
 	 * @param priority the priority to set
 	 */
@@ -207,6 +209,10 @@ public class Todo {
 	 */
 	public Repeat getRepeat() {
 		return repeat;
+	}
+	
+	public Integer getRepeatInt() {
+		return repeat.getRepeatAsInteger();
 	}
 	
 	/**
@@ -223,6 +229,11 @@ public class Todo {
 	public Status getStatus() {
 		return status;
 	}
+	
+	public Integer getStatusInt() {
+		return status.getStatusAsInteger();
+	}
+	
 	
 	/**
 	 * @param status the status to set
@@ -270,6 +281,10 @@ public class Todo {
 	public TdDateTime getModified() {
 		return this.modified;
 	}
+	
+	public String getModifiedStr() {
+		return this.modified.toString();
+	}
 	/**
 	 * @return the longer
 	 */
@@ -292,6 +307,10 @@ public class Todo {
 		return before;
 	}
 	
+	public TdDate getBeforeStr() {
+		return before;
+	}
+	
 	/**
 	 * @param before the before to set
 	 */
@@ -305,6 +324,10 @@ public class Todo {
 	 */
 	public TdDate getAfter() {
 		return after;
+	}
+	
+	public String getAfterStr() {
+		return after.toString();
 	}
 	
 	/**
@@ -322,6 +345,10 @@ public class Todo {
 		return startbefore;
 	}
 	
+	public String getStartbeforeStr() {
+		return startbefore.toString();
+	}
+	
 	/**
 	 * @param startbefore the startbefore to set
 	 */
@@ -337,9 +364,17 @@ public class Todo {
 		return startafter;
 	}
 	
+	public String getStartafterStr() {
+		return startafter.toString();
+	}
+	
 	public TdDate getStartDate() {
 		return startDate;
 	}
+	
+	public String getStartDateStr() {
+		return startDate.toString();
+	}	
 
 	public void setStartDate(TdDate startDate) {
 		this.hasStartDate = true;
@@ -362,6 +397,10 @@ public class Todo {
 		return modbefore;
 	}
 	
+	public String getModbeforeStr() {
+		return modbefore.toString();
+	}
+	
 	/**
 	 * @param modbefore the modbefore to set
 	 */
@@ -375,6 +414,13 @@ public class Todo {
 	 */
 	public TdDateTime getModafter() {
 		return modafter;
+	}
+	
+	/**
+	 * @return the modafter
+	 */
+	public String getModafterStr() {
+		return modafter.toString();
 	}
 	
 	/**
@@ -392,6 +438,11 @@ public class Todo {
 		return compbefore;
 	}
 	
+	public String getCompbeforeStr() {
+		return compbefore.toString();
+	}
+	
+	
 	/**
 	 * @param compbefore the compbefore to set
 	 */
@@ -405,6 +456,10 @@ public class Todo {
 	 */
 	public TdDate getCompafter() {
 		return compafter;
+	}
+
+	public String getCompafterStr() {
+		return compafter.toString();
 	}
 	
 	/**
@@ -435,6 +490,10 @@ public class Todo {
 	 */
 	public boolean isStar() {
 		return star;
+	}
+	
+	public Integer getStarInt() {
+		return star?1:0;
 	}
 	
 	/**
@@ -497,6 +556,10 @@ public class Todo {
 	
 	public TdDate getAdded() {
 		return this.added;
+	}
+	
+	public String getAddedStr() {
+		return this.added.toString();
 	}
 	
 	/**
@@ -690,4 +753,5 @@ public class Todo {
 	public boolean hasStartDate() {
 		return this.hasStartDate;
 	}
+	
 }

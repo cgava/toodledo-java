@@ -95,7 +95,7 @@ public class GetTodosParser extends DefaultHandler {
 		}  else if (qName.equalsIgnoreCase("completed")) {
 			tmp_.setCompafter(new TdDate(tempVal.toString()));
 		} else if (qName.equalsIgnoreCase("repeat")) {
-			tmp_.setRepeat(Repeat.ValueFromInt.get(Integer.parseInt(tempVal.toString())));
+			tmp_.setRepeat(tempVal.toString());
 		}  else if (qName.equalsIgnoreCase("status")) {
 			tmp_.setStatus(Status.ValueFromInt.get(Integer.parseInt(tempVal.toString())));
 		} else if (qName.equalsIgnoreCase("star")) {

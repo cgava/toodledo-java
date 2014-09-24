@@ -17,7 +17,7 @@ public class Todo {
 	int context; // 0 no context
 	int goal; // 0 no goal
 	Priority priority;
-	Repeat repeat;
+	String repeat;
 	String rep_advanced; 
 	Status status;
 	int parent; // 0 if none
@@ -191,10 +191,10 @@ public class Todo {
 	/**
 	 * @return the priority
 	 */
-	public Priority getPriority() {
-		return priority;
-	}
 	
+	public Integer getPriority() {
+		return hasPriority() ? priority.getPriorityAsInt() : null;
+	}
 	
 	/**
 	 * @param priority the priority to set
@@ -205,33 +205,23 @@ public class Todo {
 	}
 	
 	/**
-	 * @return the repeat
-	 */
-	public Repeat getRepeat() {
-		return repeat;
-	}
-	
-	public Integer getRepeatInt() {
-		return repeat.getRepeatAsInteger();
-	}
-	
-	/**
 	 * @param repeat the repeat to set
 	 */
-	public void setRepeat(Repeat repeat) {
+	public void setRepeat(String repeat) {
 		this.repeat = repeat;
 		this.hasRepeat = true; 
+	}
+	
+	public String getRepeat() {
+		return repeat;
 	}
 	
 	/**
 	 * @return the status
 	 */
-	public Status getStatus() {
-		return status;
-	}
 	
-	public Integer getStatusInt() {
-		return status.getStatusAsInteger();
+	public Integer getStatus() {
+		return hasStatus() ? status.getStatusAsInteger() : null;
 	}
 	
 	
@@ -492,8 +482,8 @@ public class Todo {
 		return star;
 	}
 	
-	public Integer getStarInt() {
-		return star?1:0;
+	public Integer getStar() {
+		return hasStar? (star?1:0) : 0;
 	}
 	
 	/**

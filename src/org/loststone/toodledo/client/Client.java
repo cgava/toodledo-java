@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.loststone.toodledo.ToodledoApi;
 import org.loststone.toodledo.ToodledoApiImpl;
+import org.loststone.toodledo.data.Context;
 import org.loststone.toodledo.data.Folder;
 import org.loststone.toodledo.data.Goal;
 import org.loststone.toodledo.data.Todo;
@@ -86,8 +87,9 @@ public class Client {
 		try {
 			List<Goal> goalsList = tdApi.getGoals(token);
 			System.out.println("Found "+goalsList.size()+" goals:");
+			System.out.println("INSERT INTO Goal(`id`,`private`,`archived`,`name`,`level`) VALUES (0,0,0,'No Goal',0);");
 			for (Goal _tmp : goalsList) {
-				System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`name`,`level`) VALUES "+_tmp.getId()+",0,0,`"+_tmp.getName()+"`,"+_tmp.getLevel()+");");
+				System.out.println("INSERT INTO Goal(`id`,`private`,`archived`,`name`,`level`) VALUES ("+_tmp.getId()+",0,0,'"+_tmp.getName()+"',"+_tmp.getLevel()+");");
 			}
 		} catch (ToodledoApiException e) {
 			e.printStackTrace();
@@ -101,14 +103,30 @@ public class Client {
 		try {
 			List<Folder> foldersList = tdApi.getFolders(token);
 			System.out.println("Found "+foldersList.size()+" folders:");
+			System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`order`,`name`) VALUES (0,0,0,0,'No Folder');");
 			for (Folder _tmp : foldersList) {
-				System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`order`,`name`) VALUES "+_tmp.getId()+",0,0,"+_tmp.getOrder()+",`"+_tmp.getSName()+"`);");
+				System.out.println("INSERT INTO Folder(`id`,`private`,`archived`,`order`,`name`) VALUES ("+_tmp.getId()+",0,0,"+_tmp.getOrder()+",'"+_tmp.getSName()+"');");
 			}
 		} catch (ToodledoApiException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Gets the list of all folders and prints their id and name.
+	 */
+	private void getContexts() {
+		try {
+			List<Context> contextList = tdApi.getContexts(token);
+			System.out.println("Found "+contextList.size()+" contexts:");
+			System.out.println("INSERT INTO Context(`id`,`private`,`name`) VALUES (0,0,'No Context');");
+			for (Context _tmp : contextList) {
+				System.out.println("INSERT INTO Context(`id`,`private`,`name`) VALUES ("+_tmp.getId()+",0,'"+_tmp.getName()+"');");
+			}
+		} catch (ToodledoApiException e) {
+			e.printStackTrace();
+		}
+	}
 	
     
     
@@ -145,6 +163,7 @@ public class Client {
 			//c.getTodos();
 			c.getFolders();
 			c.getGoals();
+			c.getContexts();
 		}
 	}
 
